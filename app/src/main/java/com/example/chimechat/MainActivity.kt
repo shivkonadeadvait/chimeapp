@@ -20,14 +20,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val channelArn = "REPLACE_WITH_CHANNEL_ARN"
-            val userArn = "REPLACE_WITH_USER_ARN"
+            val channelArn = "arn:aws:chime:us-east-1:855076735732:app-instance/0b31fd29-7170-4dfc-9743-b96324770d72/channel/13ec7575-fc0c-423e-b97f-3e6a5c1c5f97"
+            val userArn = "arn:aws:chime:us-east-1:855076735732:app-instance/0b31fd29-7170-4dfc-9743-b96324770d72/user/u-391cfdf5-937b-4478-b68a-1142bf950708"
 
             val credentials = remember {
                 Credentials(
-                    "REPLACE_ACCESS_KEY_ID",
-                    "REPLACE_SECRET_ACCESS_KEY",
-                    "REPLACE_SESSION_TOKEN"
+                    accessKeyId = "", secretAccessKey = ""
                 )
             }
 
@@ -49,24 +47,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GroupChatPreview() {
-    ChimeChatTheme {
-        val previewCredentials = Credentials(
-            "PREVIEW_ACCESS_KEY_ID",
-            "PREVIEW_SECRET_ACCESS_KEY",
-            "PREVIEW_SESSION_TOKEN"
-        )
-        val dummyRepository = ChimeMessagingRepository(previewCredentials)
-        val dummyViewModel = ChatViewModel(
-            repository = dummyRepository,
-            channelArn = "dummy-channel",
-            myUserArn = "dummy-user"
-        )
-        GroupChatScreen(viewModel = dummyViewModel)
     }
 }

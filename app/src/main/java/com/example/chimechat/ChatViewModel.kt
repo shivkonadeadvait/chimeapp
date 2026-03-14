@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import aws.sdk.kotlin.services.chimesdkmessaging.model.ChannelMessageSummary
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
@@ -50,8 +52,18 @@ class ChatViewModel(
 
     private fun startRealTime() {
         viewModelScope.launch {
-            repository.connectToRealTimeChat(myUserArn)
+            repository.connectToRealTimeChat(
+                userArn = myUserArn,
+                channelArn = channelArn
+            )
         }
+        repository.realtimeMessages
+            .onEach { newMessage ->
+                if (_messages.value.none { it.messageId == newMessage.messageId }) {
+                    _messages.value = listOf(newMessage) + _messages.value
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun loadMessages() {
